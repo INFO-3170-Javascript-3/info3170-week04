@@ -4,7 +4,8 @@ import { Product } from './product/product';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
 import { ProductDialogResult } from './product-dialog/product-dialog.component';
-import { ICON_REGISTRY_PROVIDER } from '@angular/material/icon';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,18 +14,28 @@ import { ICON_REGISTRY_PROVIDER } from '@angular/material/icon';
 })
 export class AppComponent {
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private store: AngularFirestore
+  ) {}
 
-  products: Product[] = [
+  products = this.store.collection('products').valueChanges(
     {
-      name: 'Product 1',
-      description: 'Description 1'
+      idField: 'id'
     }
-  ];
+  ) as Observable<Product[]>;
 
-  wishList: Product[] = [];
+  wishList = this.store.collection('wishList').valueChanges(
+    {
+      idField: 'id'
+    }
+  ) as Observable<Product[]>;
 
-  shoppingCart: Product[] = [];
+  shoppingCart = this.store.collection('shoppingCart').valueChanges(
+    {
+      idField: 'id'
+    }
+  ) as Observable<Product[]>;
 
   editProduct(list: 'shoppingCart' | 'wishList' | 'products', product: Product): void {
     const dialogRef = this.dialog.open(ProductDialogComponent, {
@@ -38,12 +49,10 @@ export class AppComponent {
       if(!result) {
         return;
       }
-      const dataList = this[list];
-      const productIndex = dataList.indexOf(product);
       if (result.delete) {
-        dataList.splice(productIndex, 1);
+        this.store.collection(list).doc(product.id).delete();
       } else {
-        dataList[productIndex] = product;
+        this.store.collection(list).doc(product.id).update(product);
       }
     })
   }
@@ -61,17 +70,29 @@ export class AppComponent {
         if (!result) {
           return;
         }
-        this.products.push(result.product);
+        this.store.collection('products').add(result.product);
       })
   }
 
-  drop(event: CdkDragDrop<Product[]>): void {
+  drop(event: CdkDragDrop<Product[]|null>): void {
     if (event.previousContainer === event.container) {
       return;
     }
-    if (!event.container.data || !event.previousContainer.data) {
+    if (!event.previousContainer.data || !event.container.data) {
       return;
     }
+    const item = event.previousContainer.data[event.previousIndex];
+    this.store.firestore.runTransaction(()=>{
+      console.log('runnning transaction');
+      console.log('previous container data', event.previousContainer.data);
+      console.log('container data', event.container.data);
+      const promise = Promise.all([
+        this.store.collection(event.previousContainer.id).doc(item.id).delete(),
+        this.store.collection(event.container.id).add(item),
+      ]);
+      console.log(promise);
+      return promise;
+    });
     transferArrayItem(
       event.previousContainer.data,
       event.container.data,

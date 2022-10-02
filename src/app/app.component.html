@@ -16,14 +16,14 @@
         cdkDropList
         id="products"
         #productsList="cdkDropList"
-        [cdkDropListData]="products"
+        [cdkDropListData]="products | async"
         [cdkDropListConnectedTo]="[wishListContainer, shoppingCartList]"
         (cdkDropListDropped)="drop($event)"
         class="list">
-        <p class="empty-label" *ngIf="products.length===0">Empty List</p>
+        <p class="empty-label" *ngIf="(products | async)?.length === 0">Empty List</p>
         <app-product 
           (edit)="editProduct('products', $event)" 
-          *ngFor="let product of products" 
+          *ngFor="let product of products | async" 
           cdkDrag 
           [product]="product"></app-product>
       </mat-card>
@@ -32,28 +32,32 @@
       <h2>Wish List</h2>
       <mat-card
         cdkDropList
-        id="products"
+        id="wishList"
         #wishListContainer="cdkDropList"
-        [cdkDropListData]="wishList"
+        [cdkDropListData]="wishList | async"
         [cdkDropListConnectedTo]="[productsList, shoppingCartList]"
         (cdkDropListDropped)="drop($event)"
         class="list">
-        <p class="empty-label" *ngIf="wishList.length===0">Empty List</p>
-        <app-product (edit)="editProduct('wishList', $event)" *ngFor="let product of wishList" cdkDrag [product]="product"></app-product>
+        <p class="empty-label" *ngIf="(wishList|async)?.length===0">Empty List</p>
+        <app-product 
+          (edit)="editProduct('wishList', $event)" 
+          *ngFor="let product of wishList|async" 
+          cdkDrag 
+          [product]="product"></app-product>
       </mat-card>
     </div>
     <div class="container">
       <h2>Shopping Cart</h2>
       <mat-card
         cdkDropList
-        id="products"
+        id="shoppingCart"
         #shoppingCartList="cdkDropList"
-        [cdkDropListData]="shoppingCart"
+        [cdkDropListData]="shoppingCart|async"
         [cdkDropListConnectedTo]="[productsList, wishListContainer]"
         (cdkDropListDropped)="drop($event)"
         class="list">
-        <p class="empty-label" *ngIf="shoppingCart.length===0">Empty List</p>
-        <app-product (edit)="editProduct('shoppingCart', $event)" *ngFor="let product of shoppingCart" cdkDrag [product]="product"></app-product>
+        <p class="empty-label" *ngIf="(shoppingCart|async)?.length===0">Empty List</p>
+        <app-product (edit)="editProduct('shoppingCart', $event)" *ngFor="let product of shoppingCart|async" cdkDrag [product]="product"></app-product>
       </mat-card>
     </div>
   </div>
