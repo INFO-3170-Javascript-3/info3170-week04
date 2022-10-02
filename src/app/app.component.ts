@@ -4,8 +4,16 @@ import { Product } from './product/product';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
 import { ProductDialogResult } from './product-dialog/product-dialog.component';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
+
+const getObservable = (collection: AngularFirestoreCollection<Product>) => {
+  const subject = new BehaviorSubject<Product[]>([]);
+  collection.valueChanges({idField: 'id'}).subscribe((val: Product[]) => {
+   subject.next(val);
+  });
+  return subject
+};
 
 @Component({
   selector: 'app-root',
@@ -19,23 +27,9 @@ export class AppComponent {
     private store: AngularFirestore
   ) {}
 
-  products = this.store.collection('products').valueChanges(
-    {
-      idField: 'id'
-    }
-  ) as Observable<Product[]>;
-
-  wishList = this.store.collection('wishList').valueChanges(
-    {
-      idField: 'id'
-    }
-  ) as Observable<Product[]>;
-
-  shoppingCart = this.store.collection('shoppingCart').valueChanges(
-    {
-      idField: 'id'
-    }
-  ) as Observable<Product[]>;
+  products = getObservable(this.store.collection('products')) as Observable<Product[]>;
+  wishList = getObservable(this.store.collection('wishList')) as Observable<Product[]>;
+  shoppingCart = getObservable(this.store.collection('shoppingCart')) as Observable<Product[]>;
 
   editProduct(list: 'shoppingCart' | 'wishList' | 'products', product: Product): void {
     const dialogRef = this.dialog.open(ProductDialogComponent, {
