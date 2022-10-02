@@ -77,14 +77,10 @@ export class AppComponent {
     }
     const item = event.previousContainer.data[event.previousIndex];
     this.store.firestore.runTransaction(()=>{
-      console.log('runnning transaction');
-      console.log('previous container data', event.previousContainer.data);
-      console.log('container data', event.container.data);
       const promise = Promise.all([
         this.store.collection(event.previousContainer.id).doc(item.id).delete(),
         this.store.collection(event.container.id).add(item),
       ]);
-      console.log(promise);
       return promise;
     });
     transferArrayItem(
