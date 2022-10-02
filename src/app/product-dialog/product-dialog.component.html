@@ -13,6 +13,11 @@
   <input matInput [(ngModel)]="data.product.pictureUrl"/>
 </mat-form-field>
 
+<mat-form-field>
+  <mat-label>Picture Url Alt Text</mat-label>
+  <input matInput [(ngModel)]="data.product.pictureAlt"/>
+</mat-form-field>
+
 <div mat-dialog-actions>
   <button mat-button [mat-dialog-close]="{ product: data.product }">OK</button>
   <button mat-button (click)="cancel()">Cancel</button>

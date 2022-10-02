@@ -39,7 +39,7 @@ export class AppComponent {
         enableDelete: true
       }
     });
-    dialogRef.afterClosed().subscribe((result:ProductDialogResult|undefined)=>{
+    dialogRef.afterClosed().subscribe((result:ProductDialogResult)=>{
       if(!result) {
         return;
       }

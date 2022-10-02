@@ -23,6 +23,7 @@ export class ProductDialogComponent implements OnInit {
     this.data.product.name = this.backupProduct.name;
     this.data.product.description = this.backupProduct.description;
     this.data.product.pictureUrl = this.backupProduct.pictureUrl;
+    this.data.product.pictureAlt = this.backupProduct.pictureAlt;
     this.dialogRef.close();
   }
 

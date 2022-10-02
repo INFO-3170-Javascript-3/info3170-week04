@@ -2,5 +2,6 @@ export interface Product {
   id?: string;
   name: string;
   description: string;
-  pictureUrl?: string;
+  pictureUrl: string;
+  pictureAlt: string;
 }

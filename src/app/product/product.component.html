@@ -1,6 +1,14 @@
 <mat-card class="item" *ngIf="product" (dblclick)="edit.emit(product)">
-  <h2>{{ product.name }}</h2>
-  <p>
-    {{ product.description }}
-  </p>
+  <mat-card-header>
+    <mat-card-title>{{ product.name }}</mat-card-title>
+  </mat-card-header>
+  <picture *ngIf="product.pictureUrl">
+    <source media="(min-width:0px)" srcset="{{ product.pictureUrl }}">
+    <img mat-card-image src="" alt="{{ product.pictureAlt }}">
+  </picture>
+  <mat-card-content>
+    <p>
+      {{ product.description }}
+    </p>
+  </mat-card-content>
 </mat-card>
