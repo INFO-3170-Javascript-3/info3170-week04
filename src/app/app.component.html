@@ -21,7 +21,11 @@
         (cdkDropListDropped)="drop($event)"
         class="list">
         <p class="empty-label" *ngIf="products.length===0">Empty List</p>
-        <app-product (edit)="editProduct('products', $event)" *ngFor="let product of products" cdkDrag [product]="product"></app-product>
+        <app-product 
+          (edit)="editProduct('products', $event)" 
+          *ngFor="let product of products" 
+          cdkDrag 
+          [product]="product"></app-product>
       </mat-card>
     </div>
     <div class="container">
@@ -35,7 +39,7 @@
         (cdkDropListDropped)="drop($event)"
         class="list">
         <p class="empty-label" *ngIf="wishList.length===0">Empty List</p>
-        <app-product (edit)="editProduct('whishList', $event)" *ngFor="let product of wishList" cdkDrag [product]="product"></app-product>
+        <app-product (edit)="editProduct('wishList', $event)" *ngFor="let product of wishList" cdkDrag [product]="product"></app-product>
       </mat-card>
     </div>
     <div class="container">

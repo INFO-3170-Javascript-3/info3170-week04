@@ -4,6 +4,7 @@ import { Product } from './product/product';
 import { MatDialog } from '@angular/material/dialog';
 import { ProductDialogComponent } from './product-dialog/product-dialog.component';
 import { ProductDialogResult } from './product-dialog/product-dialog.component';
+import { ICON_REGISTRY_PROVIDER } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,27 @@ export class AppComponent {
 
   shoppingCart: Product[] = [];
 
-  editProduct(list: string, product: Product): void {}
+  editProduct(list: 'shoppingCart' | 'wishList' | 'products', product: Product): void {
+    const dialogRef = this.dialog.open(ProductDialogComponent, {
+      width: '270px',
+      data: {
+        product,
+        enableDelete: true
+      }
+    });
+    dialogRef.afterClosed().subscribe((result:ProductDialogResult|undefined)=>{
+      if(!result) {
+        return;
+      }
+      const dataList = this[list];
+      const productIndex = dataList.indexOf(product);
+      if (result.delete) {
+        dataList.splice(productIndex, 1);
+      } else {
+        dataList[productIndex] = product;
+      }
+    })
+  }
 
   newProduct(): void {
     const dialogRef = this.dialog.open(ProductDialogComponent, {
