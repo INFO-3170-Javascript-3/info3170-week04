@@ -96,6 +96,16 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "bonsai-store:build:production",
+            "firebaseProject": "info3170-bonsai-store",
+            "firebaseHostingSite": "info3170-bonsai-store"
+          }
         }
       }
     }

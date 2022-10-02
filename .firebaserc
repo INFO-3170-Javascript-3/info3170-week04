@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "info3170-bonsai-store": {
+      "hosting": {
+        "bonsai-store": [
+          "info3170-bonsai-store"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "info3170-bonsai-store"
+  }
+}
