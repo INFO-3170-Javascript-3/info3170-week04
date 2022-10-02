@@ -3,4 +3,49 @@
   <span>Bonsai Store</span>
 </mat-toolbar>
 
-<app-product *ngFor="let product of products" [product]="product"></app-product>
+<div class="content-wrapper">
+  <div class="container-wrapper">
+    <div class="container">
+      <h2>Product List</h2>
+      <mat-card
+        cdkDropList
+        id="products"
+        #productsList="cdkDropList"
+        [cdkDropListData]="products"
+        [cdkDropListConnectedTo]="[wishListContainer, shoppingCartList]"
+        (cdkDropListDropped)="drop($event)"
+        class="list">
+        <p class="empty-label" *ngIf="products.length===0">Empty List</p>
+        <app-product (edit)="editProduct('products', $event)" *ngFor="let product of products" cdkDrag [product]="product"></app-product>
+      </mat-card>
+    </div>
+    <div class="container">
+      <h2>Wish List</h2>
+      <mat-card
+        cdkDropList
+        id="products"
+        #wishListContainer="cdkDropList"
+        [cdkDropListData]="wishList"
+        [cdkDropListConnectedTo]="[productsList, shoppingCartList]"
+        (cdkDropListDropped)="drop($event)"
+        class="list">
+        <p class="empty-label" *ngIf="products.length===0">Empty List</p>
+        <app-product (edit)="editProduct('whishList', $event)" *ngFor="let product of wishList" cdkDrag [product]="product"></app-product>
+      </mat-card>
+    </div>
+    <div class="container">
+      <h2>Shopping Cart</h2>
+      <mat-card
+        cdkDropList
+        id="products"
+        #shoppingCartList="cdkDropList"
+        [cdkDropListData]="shoppingCart"
+        [cdkDropListConnectedTo]="[productsList, wishListContainer]"
+        (cdkDropListDropped)="drop($event)"
+        class="list">
+        <p class="empty-label" *ngIf="products.length===0">Empty List</p>
+        <app-product (edit)="editProduct('shoppingCart', $event)" *ngFor="let product of shoppingCart" cdkDrag [product]="product"></app-product>
+      </mat-card>
+    </div>
+  </div>
+</div>
