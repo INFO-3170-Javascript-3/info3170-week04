@@ -9,6 +9,11 @@
 </mat-form-field>
 
 <mat-form-field>
+  <mat-label>Picture File</mat-label>
+  <input matInput type="file" (change)="upload($event)" accept=".png, .jpg"/>
+</mat-form-field>
+
+<mat-form-field>
   <mat-label>Picture Url</mat-label>
   <input matInput [(ngModel)]="data.product.pictureUrl"/>
 </mat-form-field>

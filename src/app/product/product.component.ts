@@ -22,4 +22,8 @@ export class ProductComponent implements OnInit {
   @Input() product: Product|null = null;
   @Output() edit = new EventEmitter<Product>();
 
+  handleMissingImage(event: Event) {
+    (event.target as HTMLImageElement).style.display = 'none';
+  }
+
 }

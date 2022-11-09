@@ -6,6 +6,7 @@ import { ProductDialogComponent } from './product-dialog/product-dialog.componen
 import { ProductDialogResult } from './product-dialog/product-dialog.component';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/compat/storage';
 
 const getObservable = (collection: AngularFirestoreCollection<Product>) => {
   const subject = new BehaviorSubject<Product[]>([]);
@@ -18,18 +19,21 @@ const getObservable = (collection: AngularFirestoreCollection<Product>) => {
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
 
   constructor(
     private dialog: MatDialog,
-    private store: AngularFirestore
+    private store: AngularFirestore,
+    private afStorage: AngularFireStorage
   ) {}
 
   products = getObservable(this.store.collection('products')) as Observable<Product[]>;
   wishList = getObservable(this.store.collection('wishList')) as Observable<Product[]>;
   shoppingCart = getObservable(this.store.collection('shoppingCart')) as Observable<Product[]>;
+  ref: AngularFireStorageReference;
+  pictureFile: AngularFireUploadPicture;
 
   editProduct(list: 'shoppingCart' | 'wishList' | 'products', product: Product): void {
     const dialogRef = this.dialog.open(ProductDialogComponent, {
@@ -89,6 +93,12 @@ export class AppComponent {
       event.previousIndex,
       event.currentIndex
     );
+  }
+
+  upload = (event) => {
+    const randomId = Math.random().toString(36).substring(2);
+    this.ref = this.afStorage.ref('/images/' + randomId);
+    this.pictureFile = this.ref.put(event.target.files[0]);
   }
 
 }

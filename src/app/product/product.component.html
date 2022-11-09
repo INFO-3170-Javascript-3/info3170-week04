@@ -2,9 +2,12 @@
   <mat-card-header>
     <mat-card-title>{{ product.name }}</mat-card-title>
   </mat-card-header>
-  <picture *ngIf="product.pictureUrl">
-    <source media="(min-width:0px)" srcset="{{ product.pictureUrl }}">
-    <img mat-card-image src="" alt="{{ product.pictureAlt }}">
+  <picture *ngIf="product.pictureUrl" (error)="handleMissingImage($event)">
+    <source media="(min-width:0px)" srcset="{{ product.pictureUrl }}" >
+    <img mat-card-image 
+      src="" 
+      alt="{{ product.pictureAlt }}" 
+      />
   </picture>
   <mat-card-content>
     <p>
